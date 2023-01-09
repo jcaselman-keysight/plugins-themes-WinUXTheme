@@ -123,6 +123,7 @@ static NSLock *menuLock = nil;
 - (void) _setMenu: (NSMenu *) menu;
 @end
 
+#ifndef _MSC_VER
 @implementation NSWindow (WinMenuPrivate)
 - (GSWindowDecorationView *) windowView
 {
@@ -134,6 +135,7 @@ static NSLock *menuLock = nil;
   [super setMenu: menu];
 }
 @end
+#endif
 
 NSMenuItem *itemForTag(UINT tag, NSMapTable *itemMap)
 {
@@ -342,7 +344,7 @@ HMENU r_build_menu_for_itemmap(NSMenu *menu, BOOL asPopUp, BOOL fakeItem, NSMapT
       if([item isSeparatorItem] == NO &&
          ([item hasSubmenu] == NO || [[item submenu] numberOfItems] == 0) )
         {
-          flags |= ([item isEnabled]?MF_ENABLED:MF_GRAYED); // shouldn't this be :MF_GRAYED|MF_DISABLED ?
+          flags |= MF_ENABLED; // ([item isEnabled]?MF_ENABLED:MF_GRAYED); // shouldn't this be :MF_GRAYED|MF_DISABLED ?
           // For PopUpButtons we don't set the flag on the state but on selection
 	  if (fakeItem && asPopUp)
 	    {
